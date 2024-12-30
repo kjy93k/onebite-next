@@ -1,5 +1,23 @@
 import type { AppProps } from "next/app";
-
+import Link from "next/link";
+import { useRouter } from "next/router";
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+  const router = useRouter();
+  const onClickButton = () => {
+    // router.replace("/test");
+    router.push("/test");
+  };
+  return (
+    <>
+      <Link href={"/"}>Index</Link>
+      &nbsp;
+      <Link href={"/serch"}>Serch</Link>
+      &nbsp;
+      <Link href={"/bool/1"}>Book 1</Link>
+      <div>
+        <button onClick={onClickButton}>/test 페이지로 이동</button>
+      </div>
+      <Component {...pageProps} />;
+    </>
+  );
 }
