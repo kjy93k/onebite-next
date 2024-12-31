@@ -3,7 +3,19 @@ import { useRouter } from "next/router";
 import { ReactNode } from "react";
 import books from "@/mock/books.json";
 import BookItem from "@/components/book-item";
-const Page = () => {
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import fetchBooks from "@/lib/fetch-books";
+
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const q = context.query.q as string;
+  const books = await fetchBooks(q);
+  return { props: { books } };
+};
+const Page = ({
+  books,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const { q } = router.query;
   return (
