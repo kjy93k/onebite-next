@@ -19,17 +19,24 @@ export const getStaticPaths = () => {
       { params: { id: "2" } },
       { params: { id: "3" } },
     ],
-    fallback: false, //paths에 없는 접근은 없는페이지로 취급
+    // fallback: false, //paths에 없는 접근은 404
+    // fallback: blocking, //paths에 없는 접근은 SSR로 사전렌더링
+    fallback: true, //paths에 없는 접근은  SSR 방식 + 폴백상태의 페이지 선 반환 후 데이터 있는 버전 반환
   };
 };
 
 export const getStaticProps = async (context: GetStaticPropsContext) => {
   const id = context.params!.id;
   const book = await fetchOneBook(Number(id));
+  if (!book) {
+    return { notFound: true };
+  }
   return { props: { book } };
 };
+
 const Page = ({ book }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  if (!book) return "문제가 발생했습니다 다시 시도해주세요";
+  const router = useRouter();
+  if (router.isFallback) return "로딩 중";
 
   const {
     id,
