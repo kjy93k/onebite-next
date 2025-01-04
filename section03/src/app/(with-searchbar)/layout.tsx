@@ -5,6 +5,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <div>
       <SearchBar />
+      {children}
     </div>
   );
 };
