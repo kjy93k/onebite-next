@@ -4,14 +4,12 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import style from "./searchbar.module.css";
 
-export default async function Searchbar({
-  searchParams,
-}: {
-  searchParams: Promise<{ q?: string }>;
-}) {
+export default function Searchbar() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [search, setSearch] = useState("");
-  const { q } = await searchParams;
+
+  const q = searchParams.get("q");
 
   useEffect(() => {
     setSearch(q || "");
