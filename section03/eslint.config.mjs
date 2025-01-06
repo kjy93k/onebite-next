@@ -14,6 +14,8 @@ const eslintConfig = [
   ...compat.rules({
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/no-explicit-any": "off",
+    "no-unused-vars": "off",
+    "react/prop-types": "off",
   }),
 ];
 
