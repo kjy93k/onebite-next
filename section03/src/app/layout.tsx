@@ -4,7 +4,9 @@ import style from "./layout.module.css";
 import { BookData } from "@/types";
 
 const Footer = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`, {
+    cache: "force-cache",
+  });
   if (!res.ok) return <footer>제작 @delay_laver</footer>;
   const books: BookData[] = await res.json();
   const booksCount = books.length;
