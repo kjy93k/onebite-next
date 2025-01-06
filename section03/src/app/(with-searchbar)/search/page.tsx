@@ -1,6 +1,11 @@
 import BookItem from "@/components/book-item";
 import { BookData } from "@/types";
 
+// export const dynamic = "force-static";
+// 어떠한 검색어를 입력해도 검색 결과가 비어있게 됨
+// export const dynamic = "error";
+// build 오류
+
 export default async function Page({
   searchParams,
 }: {
