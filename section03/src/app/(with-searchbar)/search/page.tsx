@@ -1,19 +1,20 @@
 import BookItem from "@/components/book-item";
 import { BookData } from "@/types";
 import delay from "@/util/delay";
+import { Suspense } from "react";
 
 // export const dynamic = "force-static";
 // 어떠한 검색어를 입력해도 검색 결과가 비어있게 됨
 // export const dynamic = "error";
 // build 오류
 
-export default async function Page({
+export const SearchResult = async ({
   searchParams,
 }: {
   searchParams: Promise<{
     q?: string;
   }>;
-}) {
+}) => {
   const { q } = await searchParams;
   await delay(1500);
   const res = await fetch(
@@ -30,5 +31,21 @@ export default async function Page({
         <BookItem key={book.id} {...book} />
       ))}
     </div>
+  );
+};
+
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    q?: string;
+  }>;
+}) {
+  const { q } = await searchParams;
+
+  return (
+    <Suspense key={q || ""} fallback={<div>Loading ...</div>}>
+      <SearchResult searchParams={searchParams} />
+    </Suspense>
   );
 }
