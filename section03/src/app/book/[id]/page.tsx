@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import style from "./page.module.css";
+import createReviewAction from "@/actions/create-review.action";
 
 // export const dynamicParams = false; => 없는 파라미터는 404
 export const generateStaticParams = () => {
@@ -7,7 +8,6 @@ export const generateStaticParams = () => {
 };
 
 const BookDetail = async ({ bookId }: { bookId: string }) => {
-  // const { id } = await params;
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/${bookId}`
   );
@@ -39,16 +39,11 @@ const BookDetail = async ({ bookId }: { bookId: string }) => {
   );
 };
 
-const ReviewEditor = () => {
-  const createReviewAction = async (formData: FormData) => {
-    "use server";
-
-    const content = formData.get("content")?.toString();
-    const author = formData.get("author")?.toString();
-  };
+const ReviewEditor = ({ bookId }: { bookId: string }) => {
   return (
     <section>
       <form action={createReviewAction}>
+        <input name="bookId" value={bookId} hidden readOnly required />
         <input name="content" placeholder="리뷰를 입력해주세요" required />
         <input name="author" placeholder="작성자" required />
         <button type="submit">작성하기</button>
@@ -66,7 +61,7 @@ export default async function Page({
   return (
     <div className={style.container}>
       <BookDetail bookId={id} />
-      <ReviewEditor />
+      <ReviewEditor bookId={id} />
     </div>
   );
 }
