@@ -6,14 +6,10 @@ export const generateStaticParams = () => {
   return [{ id: "1" }, { id: "2" }, { id: "3" }];
 };
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ id: string | string[] }>;
-}) {
-  const { id } = await params;
+const BookDetail = async ({ bookId }: { bookId: string }) => {
+  // const { id } = await params;
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/${id}`
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/${bookId}`
   );
   if (!res.ok) {
     if (res.status === 404) {
@@ -26,7 +22,7 @@ export default async function Page({
   const { title, subTitle, description, author, publisher, coverImgUrl } = book;
 
   return (
-    <div className={style.container}>
+    <section>
       <div
         className={style.cover_img_container}
         style={{ backgroundImage: `url('${coverImgUrl}')` }}
@@ -39,6 +35,38 @@ export default async function Page({
         {author} | {publisher}
       </div>
       <div className={style.description}>{description}</div>
+    </section>
+  );
+};
+
+const ReviewEditor = () => {
+  const createReviewAction = async (formData: FormData) => {
+    "use server";
+
+    const content = formData.get("content")?.toString();
+    const author = formData.get("author")?.toString();
+  };
+  return (
+    <section>
+      <form action={createReviewAction}>
+        <input name="content" placeholder="리뷰를 입력해주세요" required />
+        <input name="author" placeholder="작성자" required />
+        <button type="submit">작성하기</button>
+      </form>
+    </section>
+  );
+};
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  return (
+    <div className={style.container}>
+      <BookDetail bookId={id} />
+      <ReviewEditor />
     </div>
   );
 }
