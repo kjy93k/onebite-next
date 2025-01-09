@@ -1,15 +1,18 @@
 "use server";
 
+import delay from "@/util/delay";
 import { revalidatePath, revalidateTag } from "next/cache";
 
-const createReviewAction = async (formData: FormData) => {
+const createReviewAction = async (_: any, formData: FormData) => {
   const bookId = formData.get("bookId")?.toString();
   const content = formData.get("content")?.toString();
   const author = formData.get("author")?.toString();
 
-  if (!bookId || !content || !author) return;
+  if (!bookId || !content || !author)
+    return { status: false, error: "리뷰 내용과 작성자를 입력헤주세요." };
 
   try {
+    await delay(2000);
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_SERVER_URL}/review`,
       {
@@ -18,6 +21,8 @@ const createReviewAction = async (formData: FormData) => {
       }
     );
     console.log(res.status);
+
+    if (!res.ok) throw new Error(res.statusText);
 
     // 1. 특정 주소의 해당하는 페이지만 재검증
     // 페이지 내 모든 캐시를 무효화 함
@@ -37,9 +42,10 @@ const createReviewAction = async (formData: FormData) => {
 
     // 5. 태그 기준, 데이터 캐시 재검증
     revalidateTag(`review-${bookId}`);
+
+    return { status: true, error: "" };
   } catch (e) {
-    console.error(e);
-    return;
+    return { status: false, error: `리뷰 저장에 실패했습니다. : ${e}` };
   }
 };
 export default createReviewAction;
