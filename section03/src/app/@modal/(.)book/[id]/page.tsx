@@ -3,12 +3,9 @@ import Modal from "@/components/modal";
 
 const Page = (props: any) => {
   return (
-    <div>
-      가로채기 성공
-      <Modal>
-        <BookPage {...props} />
-      </Modal>
-    </div>
+    <Modal>
+      <BookPage {...props} />
+    </Modal>
   );
 };
 
