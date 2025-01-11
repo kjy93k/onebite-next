@@ -4,6 +4,7 @@ import { BookData } from "@/types";
 import delay from "@/util/delay";
 import { Suspense } from "react";
 import BookListSkeleton from "@/components/skeleton/book-list-skeleton";
+import { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 // 권장하지 않음
@@ -47,6 +48,16 @@ const RecoBooks = async () => {
       ))}
     </div>
   );
+};
+
+export const metadata: Metadata = {
+  title: "한입 북스",
+  description: "한입 북스에 등록된 도서를 만나보세요",
+  openGraph: {
+    title: "한입 북스",
+    description: "한입 북스에 등록된 도서를 만나보세요",
+    images: ["/thumbnail.png"],
+  },
 };
 
 export default function Home() {
