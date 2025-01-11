@@ -3,6 +3,7 @@ import style from "./page.module.css";
 import { ReviewData } from "@/types";
 import ReviewItem from "@/components/review-item";
 import ReviewEditor from "@/components/review-editor";
+import Image from "next/image";
 
 // export const dynamicParams = false; => 없는 파라미터는 404
 export const generateStaticParams = () => {
@@ -29,7 +30,12 @@ const BookDetail = async ({ bookId }: { bookId: string }) => {
         className={style.cover_img_container}
         style={{ backgroundImage: `url('${coverImgUrl}')` }}
       >
-        <img src={coverImgUrl} />
+        <Image
+          width={240}
+          height={300}
+          src={coverImgUrl}
+          alt={`도서 ${title}의 커버 이미지`}
+        />
       </div>
       <div className={style.title}>{title}</div>
       <div className={style.subTitle}>{subTitle}</div>
