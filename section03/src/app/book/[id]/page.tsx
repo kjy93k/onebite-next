@@ -7,9 +7,20 @@ import Image from "next/image";
 import { Metadata } from "next";
 
 // export const dynamicParams = false; => 없는 파라미터는 404
-export const generateStaticParams = () => {
-  return [{ id: "1" }, { id: "2" }, { id: "3" }];
-};
+export async function generateStaticParams() {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`
+  );
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+
+  const books: BookData[] = await response.json();
+
+  return books.map((book) => ({
+    id: book.id.toString(),
+  }));
+}
 
 const BookDetail = async ({ bookId }: { bookId: string }) => {
   const res = await fetch(
@@ -74,7 +85,7 @@ export const generateMetadata = async ({
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/${bookId}`
   );
-  if (!res.ok) throw Error(res.statusText);
+  if (!res.ok) throw new Error(res.statusText);
   const book: BookData = await res.json();
   return {
     title: `${book.title} - 한입북스`,
