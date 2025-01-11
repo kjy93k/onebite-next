@@ -10,7 +10,7 @@ import { Suspense } from "react";
 // export const dynamic = "error";
 // build 오류
 
-export const SearchResult = async ({
+const SearchResult = async ({
   searchParams,
 }: {
   searchParams: Promise<{
